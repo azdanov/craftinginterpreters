@@ -4,10 +4,13 @@ import fs from "node:fs";
 import readline from "node:readline";
 import { run } from "./src";
 
+const EXIT_CODE_USAGE_ERROR = 64;
+const EXIT_CODE_DATA_ERROR = 65;
+
 async function main(args: string[] = process.argv.slice(2)): Promise<void> {
   if (args.length > 1) {
     console.log("Usage: tlox [script]");
-    process.exit(64);
+    process.exit(EXIT_CODE_USAGE_ERROR);
   } else if (args[0]) {
     console.log(`Running file: ${args[0]}`);
     await runFile(args[0]);
@@ -23,7 +26,7 @@ async function runFile(filePath: string): Promise<void> {
     run(contents);
   } catch (e) {
     console.error(e);
-    process.exit(65);
+    process.exit(EXIT_CODE_DATA_ERROR);
   }
 }
 
