@@ -1,3 +1,4 @@
+import { Parser } from "./parser";
 import { Scanner } from "./scanner";
 
 /**
@@ -7,17 +8,24 @@ import { Scanner } from "./scanner";
  */
 export function run(source: string) {
   const scanner = new Scanner(source);
-  const tokens = scanner.tokens;
-  const errors = scanner.errors;
-
-  if (errors.length > 0) {
-    for (const error of errors) {
+  if (scanner.errors.length > 0) {
+    for (const error of scanner.errors) {
       console.log(error.message);
     }
     throw new Error("Failed scanning");
   }
-
-  for (const token of tokens) {
+  for (const token of scanner.tokens) {
     console.log(token);
+  }
+
+  const parser = new Parser(scanner.tokens);
+  if (parser.errors.length > 0) {
+    for (const error of parser.errors) {
+      console.log(error.message);
+    }
+    throw new Error("Failed parsing");
+  }
+  for (const statement of parser.statements) {
+    console.log(statement);
   }
 }
